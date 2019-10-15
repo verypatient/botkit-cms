@@ -1,11 +1,10 @@
 #!/bin/bash
 echo 'Calling PM2 to restart the bot';
 
-pm2 = `which pm2`
+pm2='/home/verypatient/.nvm/versions/node/v10.6.0/bin/pm2'
 
 if [[ -x $pm2 ]]; then
-  echo 'PM2 found'
-  pm2 restart botkit
+  $pm2 restart botkit
 else
   echo 'PM2 not found'
 fi
