@@ -2,6 +2,7 @@
 const uuidv4 = require('uuid/v4');
 const request = require('request');
 const async = require('async');
+const { spawnSync } = require( 'child_process' );
 
 module.exports = function(webserver, api) {
 
@@ -129,7 +130,21 @@ module.exports = function(webserver, api) {
         }
     }
 
+    webserver.post('/admin/api/restart-bot', function (req, res) {
+        console.log('Restarting the bot');
 
+        const pwd = spawnSync('pwd');
+        const restartBotScript = `${pwd.stdout.toString().replace(/\n/, '')}/bin/restart-bot.sh`;
+
+        console.log(`Restarting bot script: ${restartBotScript}`);
+
+        const restartBot = spawnSync(restartBotScript);
+
+        console.log(`Restarting bot stderr: ${restartBot.stderr.toString()}`);
+        console.log(`Restarting bot stdout: ${restartBot.stdout.toString()}`);
+
+        res.json({success: 'ok'});
+    });
 
     // receives: command, user
     webserver.post('/admin/api/script', function(req, res) {

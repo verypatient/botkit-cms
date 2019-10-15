@@ -63,8 +63,6 @@ app.controller('editBot', ['$scope', '$cookies', 'sdk', '$rootScope', '$window',
 
 
 app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
-
-
     $scope.bot_id = 1;
 
     $scope.ui.external_url = '';
@@ -339,6 +337,15 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
         }
     };
 
+    $scope.restartBot = function () {
+        console.log('Restarting the bot');
+        sdk.restartBot().then(function () {
+            alert('The bot has been restarted');
+        }).catch(function (err) {
+            $scope.handleAjaxError(err);
+        });
+    };
+
     $scope.toggleExportMode = function() {
         $scope.ui.export_mode = !$scope.ui.export_mode;
         for (var x = 0; x < $scope.commands.length; x++) {
@@ -393,7 +400,6 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
 
     $scope.deleteCommand = function(command) {
-
         // WAIT! Is this the fallback script?
         if (command.is_fallback) {
             if (!confirm('Deleting this script will disable your bot\'s fallback behavior. Are you sure you want to continue?')) {
@@ -410,13 +416,13 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
         }).catch(function(err) {
             $scope.handleAjaxError(err);
         });
-
     };
 
 
     $scope.createScriptModal = function() {
         $scope.ui.modal_create = true;
     }
+
 
     $scope.setAsFallback = function(command) {
         command.is_fallback = true;
